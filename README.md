@@ -8,14 +8,6 @@ This is a portable/autonomous data logger that monitors temperature and relative
   - Temperature: ±0.4 °C (max), –10 to 85 °C
   - Relative Humidity: ± 3% RH (max), 0–80% RH
 
-## Parts list
-
-  - ESP8266 Esp07 microcontroler
-  - SI7021 temperature and humidity sensor
-  - LT1521CST-3.3 voltage regulator
-  - 22uF 100V elec. capacitor
-  - 1900mAh 3.7V LiPo battery
-
 ## Power consumption
 
 | Parts \ Power | Running (µA)  | Deep sleep (µA)  |
@@ -31,7 +23,7 @@ Computation of power consumption for a sampling rate of 15 minutes (We estimate 
 
 Considering a battery of 1900mAh this device could ideally store 327492 points of data. The main restriction will be the size of the flash memory.
 
-## Storage
+## Data storage
 
 The [FS library](http://esp8266.github.io/Arduino/versions/2.0.0/doc/filesystem.html) is used to store the data in the ESP8266 internal flash memory.
 
@@ -56,6 +48,14 @@ Each point is composed of 2 int (2 bytes each) and a coma character (1 byte). Co
 ![Closed](res/closed.jpg)
 
 ## Hardware design
+
+Parts list:
+
+  - ESP8266 Esp07 microcontroler
+  - SI7021 temperature and humidity sensor
+  - LT1521CST-3.3 voltage regulator
+  - 22uF 100V elec. capacitor
+  - 1900mAh 3.7V LiPo battery
 
 Remember to remove any LED that would unnecessarily draw current.
 
