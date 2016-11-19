@@ -50,6 +50,8 @@ Each point is composed of 2 int (2 bytes each) and a coma character (1 byte). Co
 
 ## Hardware design
 
+Remember to remove any LED that would unnecessarily draw current.
+
 ![Sketch](res/sketch.png)
 
 ## Software design
