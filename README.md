@@ -21,7 +21,7 @@ Computation of power consumption for a sampling rate of 15 minutes (We estimate 
     
     1032 * 10^-3 * 1/3600 + 22.06 * 10^-3 * 15/60 ≈ 0.0058mAh
 
-Considering a battery of 1900mAh this device could ideally store 327492 points of data. The main restriction will be the size of the flash memory.
+Considering a battery of 1900mAh this device **could ideally store 327492 points** of data. The main restriction will be the size of the flash memory.
 
 ## Data storage
 
@@ -31,9 +31,7 @@ If we consider the smallest flash memory available, which is 64 kilobytes, we ca
 
     64000 / (2 + 2 + 1) = 12800 points of data
 
-Each point is composed of 2 int (2 bytes each) and a coma character (1 byte). Considering a sampling rate of 15 minutes:
-
-    64000 / (2 + 2 + 1) * 15/60/24 ≈ 133 days
+Each point is composed of 2 int (2 bytes each) and a coma character (1 byte). Considering a sampling rate of 15 minutes it **could ideally for run more than 133 days** .
 
 
 ## Size and weight
