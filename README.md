@@ -1,5 +1,12 @@
 # EspDataLogger
-Low power consumption data logger using ESP8266
+Low power data logger using ESP8266.
+
+This is a portable/autonomous data logger that monitors temperature and relative humidity.
+
+## Precision
+
+  - Temperature: ±0.4 °C (max), –10 to 85 °C
+  - Relative Humidity: ± 3% RH (max), 0–80% RH
 
 ## Parts list
 
