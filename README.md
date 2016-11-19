@@ -46,4 +46,17 @@ Each point is composed of 2 int (2 bytes each) and a coma character (1 byte). Co
 
 ![Open](res/open.jpg)
 
-![Closed](closed.jpg)
+![Closed](res/closed.jpg)
+
+## Hardware design
+
+![Sketch](res/sketch.png)
+
+## Software design
+
+Change the constants according to your needs:
+
+  - WAKEUP_RATE: how long should the device be sleeping between each data point.
+  - DEBUG: turn to 1 to get log messages via serial monitor.
+  - RETRIEVE: turn to 1 to read the list of data points, stored in the flash memory, via serial monitor.
+  - DELETE: turn to 1 to erase the data points from the flash memory.
