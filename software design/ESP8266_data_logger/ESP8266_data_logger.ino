@@ -14,7 +14,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with EspDataLogger.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <ESP8266WiFi.h>
@@ -33,14 +33,16 @@
 #define SDA                   13
 #define SCL                   12
 
-#define WAKEUP_RATE           15*MINUTE
+#define WAKEUP_RATE           10*MINUTE
 #define FILE_PATH             "/data.csv"
 
 #define DEBUG                 0        
 #define RETRIEVE              0
-#define DELETE                0
+#define DELETE                1
 
-#define VERSION               "1.0";
+#define VERSION               "1.0"
+
+const char compile_date[] = __DATE__ " " __TIME__;
 
 SI7021 _sensor;
 
@@ -88,7 +90,7 @@ void sleep(void) {
 
 void quickSleep(void) {
   Serial.print(F("Go to sleep for "));
-  Serial.print(WAKEUP_RATE * MICROSEC);
+  Serial.print(1 * MICROSEC);
   Serial.println(F("us."));
   ESP.deepSleep(1 * MICROSEC);
 }

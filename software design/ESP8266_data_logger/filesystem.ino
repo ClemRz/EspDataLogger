@@ -14,7 +14,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with EspDataLogger.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 void saveData(void) {
@@ -25,7 +25,19 @@ void saveData(void) {
 #endif  //DEBUG
     return;
   }
-  file.print(_celsiusHundredths); file.print(F(",")); file.println(_humidityPercent);
+  file.println(millis()); file.print(F(",")); file.print(_celsiusHundredths); file.print(F(",")); file.println(_humidityPercent);
+  file.close();
+}
+
+void saveHeaders(void) {
+  File file = SPIFFS.open(FILE_PATH, "a");
+  if (!file) {
+#if DEBUG
+    Serial.println(F("file open failed"));
+#endif  //DEBUG
+    return;
+  }
+  file.println(compile_date); file.print(F(", rate: ")); file.print(WAKEUP_RATE); file.print(F(", version: ")); file.println(VERSION);
   file.close();
 }
 
@@ -46,6 +58,7 @@ void deleteData(void) {
   bool ok = SPIFFS.remove(FILE_PATH);
   if (ok) {
     Serial.print(FILE_PATH); Serial.println(F(" deleted"));
+    saveHeaders();
   } else {
     Serial.println(F("file delete failed"));
   }
