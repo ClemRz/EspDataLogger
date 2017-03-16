@@ -41,3 +41,17 @@ void initFS(void) {
   SPIFFS.begin();
 }
 
+void initWifiAP(void) {
+    WiFi.softAP(ssid);
+}
+void initServer(void) {
+    server.on("/", HTTP_GET, handleGetRoot);
+    server.on("/", HTTP_POST, handlePostRoot);
+    server.begin();
+}
+
+void initPin(void) {
+  pinMode(AP, INPUT_PULLUP);
+  _apMode = digitalRead(AP) == LOW;
+}
+

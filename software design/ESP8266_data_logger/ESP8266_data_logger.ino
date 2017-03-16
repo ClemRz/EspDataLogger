@@ -18,6 +18,8 @@
  */
 
 #include <ESP8266WiFi.h>
+#include <WiFiClient.h> 
+#include <ESP8266WebServer.h>
 #include <Wire.h>
 #include <SI7021.h>
 #include "FS.h"
@@ -30,62 +32,91 @@
 #define HOUR                  (unsigned int) 60L*MINUTE
 #define DAY                   (unsigned long) 24L*HOUR
 
-#define SDA                   13
+#define AP                    4
 #define SCL                   12
+#define SDA                   13
 
-#define WAKEUP_RATE           10*MINUTE
-#define FILE_PATH             "/data.csv"
+#define DEFAULT_WAKEUP_RATE   10*MINUTE
+#define CONFIG_FILE_PATH      "/cfg.json"
+#define DATA_FILE_PATH        "/data.csv"
 
 #define DEBUG                 0        
 #define RETRIEVE              0
-#define DELETE                1
+#define DELETE                0
 
 #define VERSION               "1.0"
 
+const char *ssid = "espDataLogger";
 const char compile_date[] = __DATE__ " " __TIME__;
+
+ESP8266WebServer server(80);
 
 SI7021 _sensor;
 
-bool _sensorExists = false;
+bool _apMode = false,
+     _sensorExists = false;
      
 int _celsiusHundredths,
-    _humidityPercent;
+    _humidityPercent,
+    _wakeupRate;
 
+String _dateTime;
 
 void setup() {
-  WiFi.mode(WIFI_OFF);
+  initPin();
 #if DEBUG || RETRIEVE || DELETE
   initSerial();
 #endif  // DEBUG || RETRIEVE || DELETE
   initSI7021();
   initFS();
+  setWakeupRate();
+  if (_apMode) {
+    startAP();
+  } else {
+    WiFi.mode(WIFI_OFF);
+    loggData(); 
+  }
+}
+
+void loop() {
+  if (_apMode) server.handleClient();
+}
+
+void startAP(void) {
+  initWifiAP();
+  initServer();
+#if DEBUG
+  Serial.println(F("In AP Mode"));
+#endif  // DEBUG
+}
+
+void loggData(void) {
 #if RETRIEVE
   delay(5 * SEC);
-  retrieveData();
+  retrieveDataToSerial();
 #endif //RETRIEVE
 #if DELETE
   delay(5 * SEC);
+  _dateTime = compile_date;
   deleteData();
-#else
+#endif //DELETE
+#if !RETRIEVE && !DELETE
   readSensor();
   saveData();
   sleep();
-#endif  // DELETE
+#endif  // !RETRIEVE && !DELETE
 #if RETRIEVE || DELETE
   quickSleep();
 #endif  // RETRIEVE || DELETE
 }
 
-void loop() {
-}
-
 void sleep(void) {
 #if DEBUG
   Serial.print(F("Go to sleep for "));
-  Serial.print(WAKEUP_RATE * MICROSEC);
+  Serial.print(_wakeupRate * MICROSEC);
   Serial.println(F("us."));
 #endif  //DEBUG
-  ESP.deepSleep(WAKEUP_RATE * MICROSEC);
+  ESP.deepSleep(_wakeupRate * MICROSEC);
 }
 
 void quickSleep(void) {

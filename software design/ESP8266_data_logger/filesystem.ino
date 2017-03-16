@@ -18,31 +18,38 @@
  */
 
 void saveData(void) {
-  File file = SPIFFS.open(FILE_PATH, "a");
-  if (!file) {
+  File file = SPIFFS.open(DATA_FILE_PATH, "a");
+  if (file) {
+    file.print(millis()); file.print(F(",")); file.print(_celsiusHundredths); file.print(F(",")); file.println(_humidityPercent);
+    file.close();
 #if DEBUG
+  } else {
     Serial.println(F("file open failed"));
 #endif  //DEBUG
-    return;
   }
-  file.println(millis()); file.print(F(",")); file.print(_celsiusHundredths); file.print(F(",")); file.println(_humidityPercent);
-  file.close();
 }
 
 void saveHeaders(void) {
-  File file = SPIFFS.open(FILE_PATH, "a");
-  if (!file) {
+  File file = SPIFFS.open(DATA_FILE_PATH, "a");
+  if (file) {
+    file.print(_dateTime); file.print(F(", rate: ")); file.print(_wakeupRate); file.print(F(", version: ")); file.println(VERSION);
+    file.close();
 #if DEBUG
+  } else {
     Serial.println(F("file open failed"));
 #endif  //DEBUG
-    return;
   }
-  file.println(compile_date); file.print(F(", rate: ")); file.print(WAKEUP_RATE); file.print(F(", version: ")); file.println(VERSION);
-  file.close();
 }
 
-void retrieveData(void) {
-  File file = SPIFFS.open(FILE_PATH, "r");
+String getDataAttributes(void) {
+  File file = SPIFFS.open(DATA_FILE_PATH, "r");
+  String out = "";
+  if (file) out.concat(F("File: ")); out.concat(file.name()); out.concat(F(" ")); out.concat(file.size()); out.concat(F("b/64kb"));
+  return out;
+}
+
+void retrieveDataToSerial(void) {
+  File file = SPIFFS.open(DATA_FILE_PATH, "r");
   if (!file) {
     Serial.println(F("file open failed"));
     return;
@@ -54,13 +61,58 @@ void retrieveData(void) {
   Serial.println(F("-- eof --"));
 }
 
+String retrieveRawData(void) {
+  File file = SPIFFS.open(DATA_FILE_PATH, "r");
+  String out = "";
+  if (!file) {
+    out.concat(F("no data"));
+  } else {
+    while(file.available()) {
+      out.concat(file.readStringUntil('\n')); out.concat(F("\n"));
+    }
+  }
+  out.concat(_dateTime); out.concat(F("\n"));
+  return out;
+}
+
 void deleteData(void) {
-  bool ok = SPIFFS.remove(FILE_PATH);
-  if (ok) {
-    Serial.print(FILE_PATH); Serial.println(F(" deleted"));
+  if (SPIFFS.remove(DATA_FILE_PATH)) {
+#if DEBUG
+    Serial.print(DATA_FILE_PATH); Serial.println(F(" deleted"));
+#endif  //DEBUG
     saveHeaders();
+#if DEBUG
   } else {
     Serial.println(F("file delete failed"));
+#endif  //DEBUG
+  }
+}
+
+void setWakeupRate(void) {
+  int rate = DEFAULT_WAKEUP_RATE;
+  File file = SPIFFS.open(CONFIG_FILE_PATH, "r");
+  if (file) {
+    while(file.available()) {
+      rate = file.readStringUntil('\n').toInt();
+    }
+#if DEBUG
+  } else {
+    Serial.println(F("file open failed"));
+#endif  //DEBUG
+  }
+  _wakeupRate = rate;
+}
+
+void saveWakeupRate(void) {
+  File file = SPIFFS.open(CONFIG_FILE_PATH, "w");
+  if (file) {
+    file.println(_wakeupRate);
+    file.close();
+    saveHeaders();
+#if DEBUG
+  } else {
+    Serial.println(F("file open failed"));
+#endif  //DEBUG
   }
 }
 
