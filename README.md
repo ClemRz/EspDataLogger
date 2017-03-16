@@ -113,4 +113,5 @@ OR
 ![UI](res/ui.png)
 
 The list of actions is quite explicit about what you can do.
-
+When you download the file, the current date and time is appended so you can compute the real interval between each line of data.
+Also, when you update the wakeup rate, a new header line is appended to the file to keep track of the change.
