@@ -80,7 +80,7 @@ Change the constants according to your needs:
 
   - DEFAULT_WAKEUP_RATE: This is the default value for how long should the device be sleeping between each data point. In the case the config cannot be read for some reason.
 
-The following is deprecated, you should use the UI in AP mode:
+The following are deprecated, you should use the UI in AP mode instead:
 
   - DEBUG: turn to 1 to get log messages via serial monitor.
   - RETRIEVE: turn to 1 to read the list of data points, stored in the flash memory, via serial monitor.
@@ -107,3 +107,10 @@ To leave the AP mode and go back to logging mode do either one of the following:
 OR
 
   - Push and release the reset button.
+
+### UI
+
+![UI](res/ui.png)
+
+The list of actions is quite explicit about what you can do.
+
