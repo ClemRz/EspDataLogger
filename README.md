@@ -13,6 +13,7 @@ This is a portable/autonomous data logger that monitors temperature and relative
   - [Hardware design](#hardware-design)
   - [Software design](#software-design)
   - [User Manual](#user-manual)
+  - [User Interface](#user-interface)
 
 ## Precision
 
@@ -108,7 +109,7 @@ OR
 
   - Push and release the reset button.
 
-### UI
+## User Interface
 
 ![UI](res/ui.png)
 
