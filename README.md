@@ -77,6 +77,12 @@ Remember to remove any LED that would unnecessarily draw current.
 
 ## Software design
 
+### Dependencies
+
+  - [SI7021.h library](https://github.com/LowPowerLab/SI7021)
+
+### Parameters
+
 Change the constants according to your needs:
 
   - DEFAULT_WAKEUP_RATE: This is the default value for how long should the device be sleeping between each data point. In the case the config cannot be read for some reason.
