@@ -57,7 +57,7 @@ Considering a sampling rate of 15 minutes it **could ideally run for more than 5
 
 ![Open](res/open.jpg)
 
-![Closed](res/closed.jpg) [TBR]
+![Closed](res/closed.jpg)
 
 ## Hardware design
 
