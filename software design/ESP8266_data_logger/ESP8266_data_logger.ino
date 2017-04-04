@@ -23,7 +23,6 @@
 #include <Wire.h>
 #include <SI7021.h>
 #include "FS.h"
-#include "structures.h"
 
 #define MICROSEC              1000000L
 #define MILLISEC              1000L

@@ -36,13 +36,19 @@ void handlePostRoot(void) {
     case 3:
       _wakeupRate = server.arg("rate").toInt();
       saveWakeupRate();
-      sendWebPage(false);
+      deleteData();
+      ESP.restart();
       break;
     case 4:
+      _wakeupRate = server.arg("rate").toInt();
+      saveWakeupRate();
+      sendWebPage(false);
+      break;
+    case 5:
       deleteData();
       sendWebPage(true);
       break;
-    case 5:
+    case 6:
       ESP.restart();
       break;
     default:
@@ -66,14 +72,15 @@ void sendWebPage(bool showContent) {
   out.concat(F("<textarea rows=\"10\" style=\"width:50%;display:block;\" disabled>"));
   out.concat(showContent ? retrieveRawData() : F("Select \"Show file content\" to see its content here."));
   out.concat(F("</textarea>"));
-  out.concat(F("<label for\"rate\">Wakeup rate in seconds:</label> <input type=\"number\" min=\"1\" name=\"rate\" id=\"rate\" value=\"")); out.concat(_wakeupRate); out.concat(F("\"><br>"));
+  out.concat(F("<label for\"rate\">Sampling rate in seconds:</label> <input type=\"number\" min=\"1\" name=\"rate\" id=\"rate\" value=\"")); out.concat(_wakeupRate); out.concat(F("\"><br>"));
   out.concat(F("<select name=\"action\">"));
   out.concat(F("<option>-</option>"));
   out.concat(F("<option value=\"1\">Download the file</option>"));
   out.concat(F("<option value=\"2\">Show file content</option>"));
-  out.concat(F("<option value=\"3\">Update wakeup rate</option>"));
-  out.concat(F("<option value=\"4\">Delete the file</option>"));
-  out.concat(F("<option value=\"5\">Reset the ESP</option>"));
+  out.concat(F("<option value=\"3\">Update rate, Delete and Reset</option>"));
+  out.concat(F("<option value=\"4\">Update sampling rate</option>"));
+  out.concat(F("<option value=\"5\">Delete the file</option>"));
+  out.concat(F("<option value=\"6\">Reset the ESP</option>"));
   out.concat(F("</select><br>"));
   out.concat(F("<input type=\"hidden\" name=\"dt\" id=\"dt\">"));
   out.concat(F("<input type=\"submit\" value=\"Go\">"));
