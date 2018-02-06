@@ -26,18 +26,18 @@ void handlePostRoot(void) {
   _dateTime = server.arg("dt");
   switch (action) {
     case 1:
-      server.sendHeader(F("Content-Disposition"), F("attachment; filename=data.csv"));
-      server.sendHeader(F("Pragma"), F("no-cache"));
-      sendRawFile();
-      break;
-    case 2:
-      sendWebPage(true);
-      break;
-    case 3:
       _wakeupRate = server.arg("rate").toInt();
       saveWakeupRate();
       deleteData();
       ESP.restart();
+      break;
+    case 2:
+      server.sendHeader(F("Content-Disposition"), F("attachment; filename=data.csv"));
+      server.sendHeader(F("Pragma"), F("no-cache"));
+      sendRawFile();
+      break;
+    case 3:
+      sendWebPage(true);
       break;
     case 4:
       _wakeupRate = server.arg("rate").toInt();
@@ -64,9 +64,10 @@ void sendWebPage(bool showContent) {
   readSensor();
   String out = "";
   out.concat(F("<!DOCTYPE html><html style=\"height:100%;\">"));
-  out.concat(F("<head><title>ESP8266 Temp and RH Logger</title></head>"));
+  out.concat(F("<head><title>ESP8266 Temp and RH Logger</title>"));
+  out.concat(F("<meta name=\"viewport\" content=\"initial-scale=1,maximum-scale=1,user-scalable=no\"></head>"));
   out.concat(F("<bodystyle=\"height:100%;font-family:arial;\">"));
-  out.concat(F("<h3>Current reading: ")); out.concat(_celsiusHundredths/100); out.concat(F("°C ")); out.concat(_humidityPercent); out.concat(F("%RH</h3>"));
+  out.concat(F("<h3>Current reading: ")); out.concat(_celsiusHundredths/100); out.concat(F("C ")); out.concat(_humidityPercent); out.concat(F("%RH</h3>"));
   out.concat(F("<p>")); out.concat(getDataAttributes()); out.concat(F("</p>"));
   out.concat(F("<form onsubmit=\"JavaScript:var d=new Date();document.getElementById('dt').value = (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();return true;\" method=\"post\" style=\"height:100%;\">"));
   out.concat(F("<textarea rows=\"10\" style=\"width:50%;display:block;\" disabled>"));
@@ -74,10 +75,9 @@ void sendWebPage(bool showContent) {
   out.concat(F("</textarea>"));
   out.concat(F("<label for\"rate\">Sampling rate in seconds:</label> <input type=\"number\" min=\"1\" name=\"rate\" id=\"rate\" value=\"")); out.concat(_wakeupRate); out.concat(F("\"><br>"));
   out.concat(F("<select name=\"action\">"));
-  out.concat(F("<option>-</option>"));
-  out.concat(F("<option value=\"1\">Download the file</option>"));
-  out.concat(F("<option value=\"2\">Show file content</option>"));
-  out.concat(F("<option value=\"3\">Update rate, Delete and Reset</option>"));
+  out.concat(F("<option value=\"1\" selected>Update rate, Delete and Reset</option>"));
+  out.concat(F("<option value=\"2\">Download the file</option>"));
+  out.concat(F("<option value=\"3\">Show file content</option>"));
   out.concat(F("<option value=\"4\">Update sampling rate</option>"));
   out.concat(F("<option value=\"5\">Delete the file</option>"));
   out.concat(F("<option value=\"6\">Reset the ESP</option>"));

@@ -95,6 +95,7 @@ void setWakeupRate(void) {
     while(file.available()) {
       rate = file.readStringUntil('\n').toInt();
     }
+    file.close();
 #if DEBUG
   } else {
     Serial.println(F("file open failed"));
