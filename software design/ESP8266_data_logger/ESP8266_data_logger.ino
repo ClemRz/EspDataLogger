@@ -43,7 +43,7 @@
 #define RETRIEVE              0
 #define DELETE                0
 
-#define VERSION               "1.0"
+#define VERSION               "1.1"
 
 const char *ssid = "espDataLogger";
 const char compile_date[] = __DATE__ " " __TIME__;
